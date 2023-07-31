@@ -1,7 +1,6 @@
 # Building a Secure Banking Application with Java and Spring Boot
 
-## Introduction 
-
+## Introduction
 Welcome to the repository for the secure banking application
 built with Java and Spring 
 Boot. 
