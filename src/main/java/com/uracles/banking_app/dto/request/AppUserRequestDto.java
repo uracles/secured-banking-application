@@ -21,5 +21,5 @@ public class AppUserRequestDto {
     private String email;
     private String phoneNumber;
     private String alternatePhoneNumber;
-    private String status;
+//    private String status;
 }

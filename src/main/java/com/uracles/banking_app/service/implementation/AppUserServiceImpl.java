@@ -4,7 +4,10 @@ import com.uracles.banking_app.dto.request.AppUserRequestDto;
 import com.uracles.banking_app.dto.response.BankResponse;
 import com.uracles.banking_app.entity.AppUser;
 import com.uracles.banking_app.service.AppUserService;
+import com.uracles.banking_app.utils.AccountUtils;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -18,7 +21,12 @@ public class AppUserServiceImpl implements AppUserService {
                 .gender(userRequest.getGender())
                 .address(userRequest.getAddress())
                 .stateOfOrigin(userRequest.getStateOfOrigin())
-                .accountNumber(u)
+                .accountNumber(AccountUtils.generateAccountNumber())
+                .email(userRequest.getEmail())
+                .accountBalance(BigDecimal.ZERO)
+                .phoneNumber(userRequest.getPhoneNumber())
+                .alternatePhoneNumber(userRequest.getAlternatePhoneNumber())
+                .status("ACTIVE")
 
                 .build();
 
