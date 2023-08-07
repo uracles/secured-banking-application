@@ -5,6 +5,12 @@ import java.time.Year;
 public class AccountUtils {
 
 
+    public static final String ACCOUNT_EXISTS_CODE = "001";
+    public  static final String ACCOUNT_EXISTS_MESSAGE = "A user is registered with this email";
+    public static final String ACCOUNT_CREATION_SUCCESS_CODE = "002";
+    public static final String ACCOUNT_CREATION_SUCCESS_MESSAGE = "Account has been successfully created";
+
+
     public static String generateAccountNumber(){
         //logic to generate account number
         //should start with 2023 and any random 6 digits to make it 10 digits
