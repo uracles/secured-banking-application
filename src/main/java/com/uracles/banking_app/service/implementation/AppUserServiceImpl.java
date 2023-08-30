@@ -15,48 +15,52 @@ import java.math.BigDecimal;
 
 
 @Service
+@RequiredArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 
-    @Autowired
-    AppUserRepository appUserRepository;
+
+    private final AppUserRepository appUserRepository;
     @Override
     public BankResponse createAccount(AppUserRequestDto userRequest) {
         //check if user already has an account
         //create an account, save a user to db
-        if(appUserRepository.existsByEmail(userRequest.getEmail())){
+        if (appUserRepository.existsByEmail(userRequest.getEmail())) {
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_EXISTS_CODE)
                     .responseMessage(AccountUtils.ACCOUNT_EXISTS_MESSAGE)
                     .accountInfo(null)
                     .build();
+        } else {
+
+
+            AppUser newUser = AppUser.builder()
+                    .firstName(userRequest.getFirstName())
+                    .lastName(userRequest.getLastName())
+                    .otherName(userRequest.getOtherName())
+                    .gender(userRequest.getGender())
+                    .address(userRequest.getAddress())
+                    .stateOfOrigin(userRequest.getStateOfOrigin())
+                    .accountNumber(AccountUtils.generateAccountNumber()) //logic
+                    .email(userRequest.getEmail())
+                    .accountBalance(BigDecimal.ZERO) //used big decimal
+                    .phoneNumber(userRequest.getPhoneNumber())
+                    .alternatePhoneNumber(userRequest.getAlternatePhoneNumber())
+                    .status("ACTIVE")
+                    .build();
+
+            AppUser savedAppUser = appUserRepository.save(newUser);
+
+
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_CREATION_SUCCESS_MESSAGE)
+                    .accountInfo(AccountInfo.builder()
+                            .accountName(savedAppUser.getFirstName() + " " + savedAppUser.getLastName()
+                                    + " " + savedAppUser.getOtherName())
+                            .accountBalance(savedAppUser.getAccountBalance())
+                            .accountNumber(savedAppUser.getAccountNumber())
+                            .build())
+                    .build();
         }
-
-        AppUser newUser = AppUser.builder()
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .otherName(userRequest.getOtherName())
-                .gender(userRequest.getGender())
-                .address(userRequest.getAddress())
-                .stateOfOrigin(userRequest.getStateOfOrigin())
-                .accountNumber(AccountUtils.generateAccountNumber()) //logic
-                .email(userRequest.getEmail())
-                .accountBalance(BigDecimal.ZERO) //used big decimal
-                .phoneNumber(userRequest.getPhoneNumber())
-                .alternatePhoneNumber(userRequest.getAlternatePhoneNumber())
-                .status("ACTIVE")
-                .build();
-
-        AppUser savedAppUser = appUserRepository.save(newUser);
-
-        return BankResponse.builder()
-                .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS_CODE)
-                .responseMessage(AccountUtils.ACCOUNT_CREATION_SUCCESS_MESSAGE)
-                .accountInfo(AccountInfo.builder()
-                        .accountName(savedAppUser.getFirstName() + " " + savedAppUser.getLastName()
-                        + " " + savedAppUser.getOtherName())
-                        .accountBalance(savedAppUser.getAccountBalance())
-                        .accountNumber(savedAppUser.getAccountNumber())
-                        .build())
-                .build();
     }
 }
