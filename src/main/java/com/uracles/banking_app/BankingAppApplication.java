@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 
-@EnableAsync
+
 @SpringBootApplication
 public class BankingAppApplication {
 
@@ -25,4 +25,9 @@ public class BankingAppApplication {
 //		}
 //	}
 
+
 }
+
+
+
+
