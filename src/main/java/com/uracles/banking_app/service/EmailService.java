@@ -1,0 +1,7 @@
+package com.uracles.banking_app.service;
+
+import com.uracles.banking_app.dto.request.EmailDetails;
+
+public interface EmailService {
+    void sendEmailAlert(EmailDetails emailDetails);
+}
