@@ -2,6 +2,7 @@ package com.uracles.banking_app.service.implementation;
 
 import com.uracles.banking_app.dto.request.AppUserRequestDto;
 import com.uracles.banking_app.dto.request.EmailDetails;
+import com.uracles.banking_app.dto.request.EnquiryRequest;
 import com.uracles.banking_app.dto.response.AccountInfo;
 import com.uracles.banking_app.dto.response.BankResponse;
 import com.uracles.banking_app.entity.AppUser;
@@ -35,8 +36,6 @@ public class AppUserServiceImpl implements AppUserService {
                     .accountInfo(null)
                     .build();
         } else {
-
-
             AppUser newUser = AppUser.builder()
                     .firstName(userRequest.getFirstName())
                     .lastName(userRequest.getLastName())
@@ -54,13 +53,13 @@ public class AppUserServiceImpl implements AppUserService {
 
             AppUser savedAppUser = appUserRepository.save(newUser);
             //send email alert
-            EmailDetails emailDetails =EmailDetails.builder()
-                    .recipient(savedAppUser.getEmail())
-                    .subject("ACCOUNT CREATION")
-                    .messageBody("Congratulations, Your Account Has Been Successfully Created. \nYour Account Details: \n" +
-                            "Account Name: " + savedAppUser.getFirstName() + " " + savedAppUser.getLastName() + " " + savedAppUser.getOtherName() + "\n Account Number: " + savedAppUser.getAccountNumber())
-                    .build();
-            emailService.sendEmailAlert(emailDetails);
+//            EmailDetails emailDetails =EmailDetails.builder()
+//                    .recipient(savedAppUser.getEmail())
+//                    .subject("ACCOUNT CREATION")
+//                    .messageBody("Congratulations, Your Account Has Been Successfully Created. \nYour Account Details: \n" +
+//                            "Account Name: " + savedAppUser.getFirstName() + " " + savedAppUser.getLastName() + " " + savedAppUser.getOtherName() + "\n Account Number: " + savedAppUser.getAccountNumber())
+//                    .build();
+//            emailService.sendEmailAlert(emailDetails);
 
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS_CODE)
@@ -73,5 +72,21 @@ public class AppUserServiceImpl implements AppUserService {
                             .build())
                     .build();
         }
+    }
+
+    @Override
+    public BankResponse balanceEnquiry(EnquiryRequest enquiryRequest) {
+        //check if the provided account number is in db
+        boolean isAccountExist = appUserRepository.existsByAccountNumber(enquiryRequest.getAccountNumber());
+        if (!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.A)
+                    .build();
+        }
+    }
+
+    @Override
+    public String nameEnquiry(EnquiryRequest enquiryRequest) {
+        return null;
     }
 }
